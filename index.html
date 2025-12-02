@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Saldo - Plan de Cuentas</title>
+    <link rel="stylesheet" href="style.css?v=20251202">
+</head>
+<body>
+    <h1>Consulta de Saldo Contable 📊</h1>
+
+    <label for="codigo">Seleccione código de cuenta de detalle (Nivel 0):</label>
+    <select id="codigo">
+        <option value="">-- Seleccione un código --</option>
+    </select>
+    <button onclick="consultar()">Consultar Saldo</button>
+
+    <div id="resultado"></div>
+
+    <script src="script.js?v=20251202"></script>
+</body>
+</html>

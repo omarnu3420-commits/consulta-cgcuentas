@@ -1,0 +1,103 @@
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    color: #000;
+}
+
+h1 {
+    color: #336699;
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #336699;
+    padding-bottom: 10px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+select {
+    width: 100%;
+    max-width: 400px;
+}
+
+select, button {
+    font-size: 16px;
+    padding: 8px;
+    margin: 10px 0;
+    border: 2px solid #000;
+    border-radius: 4px;
+    background-color: #ffffcc;
+    color: #000;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #336699;
+    color: #fff;
+    cursor: pointer;
+    width: auto;
+    margin-left: 10px;
+}
+
+button:hover {
+    background-color: #254d73;
+}
+
+#resultado {
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid #000;
+    background-color: #ffffff;
+    line-height: 1.8;
+    border-radius: 5px;
+}
+
+#resultado div {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+}
+
+#resultado strong {
+    font-weight: bold;
+    color: #336699; 
+}
+
+/* Estilos de la nueva estructura de resultados */
+
+.consulta-header {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    font-size: 1.2em; /* Hace el código y nombre más grandes */
+}
+
+.movimientos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Distribuye los 3 saldos/movimientos en columnas */
+    gap: 10px;
+}
+
+.saldos-finales {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #336699;
+}
+
+.calculated-saldo {
+    background-color: #f0f8ff; /* Fondo celeste suave para destacar */
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid #cceeff;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+span {
+    /* Asegura que solo los montos dentro de pintar/calculado tengan su color de signo */
+    font-weight: normal !important; 
+}
