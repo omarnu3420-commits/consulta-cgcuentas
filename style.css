@@ -1,3 +1,5 @@
+/* style.css (Versión Optimizada para Móviles) */
+
 body {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
@@ -22,25 +24,31 @@ label {
 select {
     width: 100%;
     max-width: 400px;
+    margin-bottom: 0;
 }
 
 select, button {
     font-size: 16px;
-    padding: 8px;
-    margin: 10px 0;
+    padding: 10px; /* Aumentado a 10px para facilitar el toque */
+    margin-top: 10px;
     border: 2px solid #000;
     border-radius: 4px;
     background-color: #ffffcc;
     color: #000;
     box-sizing: border-box;
+    transition: background-color 0.3s ease;
+    /* Aseguramos que ocupen su propia línea y estén alineados en el centro */
+    display: block; 
+    width: 100%;
+    max-width: 400px;
 }
 
 button {
     background-color: #336699;
     color: #fff;
     cursor: pointer;
-    width: auto;
-    margin-left: 10px;
+    margin-left: 0; /* Eliminado el margen que lo separaba del select */
+    margin-bottom: 20px;
 }
 
 button:hover {
@@ -56,7 +64,8 @@ button:hover {
     border-radius: 5px;
 }
 
-#resultado div {
+/* Estilo general para las filas de resultados (desktop) */
+#resultado > div {
     display: flex;
     justify-content: space-between;
     padding: 3px 0;
@@ -73,31 +82,86 @@ button:hover {
     margin-bottom: 15px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
-    font-size: 1.2em; /* Hace el código y nombre más grandes */
+    font-size: 1.2em;
 }
 
 .movimientos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Distribuye los 3 saldos/movimientos en columnas */
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop */
     gap: 10px;
-}
-
-.saldos-finales {
     margin-top: 15px;
-    padding-top: 15px;
-    border-top: 2px solid #336699;
 }
 
-.calculated-saldo {
-    background-color: #f0f8ff; /* Fondo celeste suave para destacar */
-    padding: 5px 10px;
-    border-radius: 3px;
-    border: 1px solid #cceeff;
-    font-size: 1.1em;
+/* Estilos para las filas de Saldo */
+.saldo-calculado-row, .saldo-json-row {
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    /* Usar flexbox para justificar el contenido */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Resalta el valor del saldo calculado */
+.valor-calculado {
+    font-size: 1.5em; 
     font-weight: bold;
 }
 
-span {
-    /* Asegura que solo los montos dentro de pintar/calculado tengan su color de signo */
-    font-weight: normal !important; 
+
+/* ------------------------------------------------ */
+/* Optimizaciones para Móviles (pantallas <= 600px) */
+/* ------------------------------------------------ */
+@media (max-width: 600px) {
+    
+    body {
+        padding: 10px; /* Reducir el padding general */
+    }
+
+    h1 {
+        font-size: 20px; /* Reducir tamaño de título */
+    }
+
+    /* Apilar los 3 movimientos en una sola columna */
+    .movimientos-grid {
+        grid-template-columns: 1fr; /* 1 columna en móvil */
+        gap: 15px;
+    }
+    
+    /* Mejorar la legibilidad de cada movimiento en el grid */
+    .movimientos-grid > div {
+        border: 1px solid #eee;
+        padding: 8px;
+        border-radius: 4px;
+        /* Forzar que el valor se alinee a la derecha */
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    /* Forzar que el CÓDIGO/NOMBRE se apile en el encabezado */
+    .consulta-header > div {
+        display: block; 
+        margin-bottom: 5px;
+    }
+    
+    /* Mejorar la visualización del saldo final apilando el label y el valor */
+    .saldo-calculado-row, 
+    .saldo-json-row {
+        display: block; /* Forzar el apilamiento */
+        padding: 8px 0;
+    }
+
+    .saldo-calculado-row > div:first-child, .saldo-json-row > div:first-child {
+        margin-bottom: 5px; /* Espacio entre el label y el valor */
+    }
+    
+    /* Alinear el valor del saldo a la derecha en móvil */
+    .valor-calculado, .valor-json {
+        text-align: right;
+    }
+    
+    /* Ajustar el tamaño del saldo calculado para más impacto */
+    .valor-calculado {
+        font-size: 1.8em !important; 
+    }
 }
