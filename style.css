@@ -27,9 +27,10 @@ select {
     margin-bottom: 0;
 }
 
+/* Mejora para select y button en móvil */
 select, button {
     font-size: 16px;
-    padding: 10px; /* Aumentado a 10px para facilitar el toque */
+    padding: 10px; 
     margin-top: 10px;
     border: 2px solid #000;
     border-radius: 4px;
@@ -37,17 +38,16 @@ select, button {
     color: #000;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
-    /* Aseguramos que ocupen su propia línea y estén alineados en el centro */
     display: block; 
     width: 100%;
-    max-width: 400px;
+    max-width: 400px; /* Limita el ancho en desktop */
 }
 
 button {
     background-color: #336699;
     color: #fff;
     cursor: pointer;
-    margin-left: 0; /* Eliminado el margen que lo separaba del select */
+    margin-left: 0; 
     margin-bottom: 20px;
 }
 
@@ -64,13 +64,6 @@ button:hover {
     border-radius: 5px;
 }
 
-/* Estilo general para las filas de resultados (desktop) */
-#resultado > div {
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 0;
-}
-
 #resultado strong {
     font-weight: bold;
     color: #336699; 
@@ -85,24 +78,22 @@ button:hover {
     font-size: 1.2em;
 }
 
+/* 3 columnas en desktop */
 .movimientos-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 10px;
     margin-top: 15px;
 }
 
-/* Estilos para las filas de Saldo */
 .saldo-calculado-row, .saldo-json-row {
     padding: 10px 0;
     border-top: 1px solid #ddd;
-    /* Usar flexbox para justificar el contenido */
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Resalta el valor del saldo calculado */
 .valor-calculado {
     font-size: 1.5em; 
     font-weight: bold;
@@ -115,16 +106,16 @@ button:hover {
 @media (max-width: 600px) {
     
     body {
-        padding: 10px; /* Reducir el padding general */
+        padding: 10px; 
     }
 
     h1 {
-        font-size: 20px; /* Reducir tamaño de título */
+        font-size: 20px; 
     }
 
     /* Apilar los 3 movimientos en una sola columna */
     .movimientos-grid {
-        grid-template-columns: 1fr; /* 1 columna en móvil */
+        grid-template-columns: 1fr; 
         gap: 15px;
     }
     
@@ -133,7 +124,6 @@ button:hover {
         border: 1px solid #eee;
         padding: 8px;
         border-radius: 4px;
-        /* Forzar que el valor se alinee a la derecha */
         display: flex;
         justify-content: space-between;
     }
@@ -147,12 +137,12 @@ button:hover {
     /* Mejorar la visualización del saldo final apilando el label y el valor */
     .saldo-calculado-row, 
     .saldo-json-row {
-        display: block; /* Forzar el apilamiento */
+        display: block; 
         padding: 8px 0;
     }
 
     .saldo-calculado-row > div:first-child, .saldo-json-row > div:first-child {
-        margin-bottom: 5px; /* Espacio entre el label y el valor */
+        margin-bottom: 5px; 
     }
     
     /* Alinear el valor del saldo a la derecha en móvil */
