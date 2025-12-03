@@ -97,7 +97,7 @@ button:hover {
 
 .consulta-header {
     /* Estilo del encabezado de cuenta (CÓDIGO y NOMBRE) */
-    margin-top: 15px; /* Separación después del nuevo encabezado */
+    margin-top: 15px; 
     margin-bottom: 15px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;

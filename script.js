@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251202"; 
+const VERSION = "20251203"; 
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
@@ -125,7 +125,7 @@ function consultar() {
         return;
     }
 
-    // Lógica de cálculo (sin cambios)
+    // Lógica de cálculo 
     const saldo_anterior = parseMonto(cuenta.SALDO_ANTERIOR);
     const debitos = parseMonto(cuenta.DEBITOS_MES);
     const creditos = parseMonto(cuenta.CREDITOS_MES);
