@@ -108,7 +108,8 @@ function consultar() {
         })}</span>`;
     }
 
-    // ESTRUCTURA HTML ACTUALIZADA (Usa las clases de style.css)
+    // ESTRUCTURA HTML ACTUALIZADA
+    // Se ha quitado la comparación con SALDO EN JSON y se renombra a SALDO ACTUAL.
     resultado.innerHTML = `
         <div class="consulta-header">
             <div><strong>CÓDIGO:</strong> ${cuenta.CODIGO}</div>
@@ -124,13 +125,8 @@ function consultar() {
         <hr style="border-top: 1px dashed #aaa; margin: 15px 0;">
         
         <div class="saldo-calculado-row">
-            <div><strong>SALDO CALCULADO:</strong></div>
+            <div><strong>SALDO ACTUAL:</strong></div>
             <div class="valor-calculado">${saldo_calculado_span}</div>
-        </div>
-        
-        <div class="saldo-json-row">
-            <div><strong>SALDO EN JSON:</strong></div>
-            <div class="valor-json">${pintar(cuenta.SALDO_ACTUAL)}</div>
         </div>
     `;
 }
