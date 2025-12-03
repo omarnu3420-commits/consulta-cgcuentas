@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251205"; // Versión actualizada
+const VERSION = "20251206"; // Versión actualizada
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
@@ -80,7 +80,7 @@ function consultar() {
     // 1. Nombre de la Compañía
     const nombreCia = infoHeader.NOMBRE;
 
-    // 2. Extraer y Formatear Mes/Año de Proceso (asume MMYY en los últimos 4 dígitos antes del signo)
+    // 2. Extraer y Formatear Mes/Año de Proceso 
     const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); 
     const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
     
@@ -97,7 +97,7 @@ function consultar() {
     
     const mesAnioProceso = `${mes}/${anio}`;
 
-    // 3. Crear el nuevo encabezado de información (QUITANDO EL <br>)
+    // 3. Crear el nuevo encabezado de información (SIN <br>)
     const headerHtml = `
         <div class="consulta-info-header">
             <div><strong>CIA:</strong> ${nombreCia}</div>
@@ -138,26 +138,28 @@ function consultar() {
         })}</span>`;
     }
 
-    // ESTRUCTURA HTML FINAL
+    // ESTRUCTURA HTML FINAL (Añadiendo el wrapper .consulta-detalle-box)
     resultado.innerHTML = `
         ${headerHtml}
         
-        <div class="consulta-header">
-            <div><strong>CÓDIGO:</strong> ${cuenta.CODIGO}</div>
-            <div><strong>NOMBRE:</strong> ${cuenta.NOMBRE}</div>
-        </div>
-        
-        <div class="movimientos-grid">
-            <div><strong>SALDO ANTERIOR:</strong> ${pintar(cuenta.SALDO_ANTERIOR)}</div>
-            <div><strong>DÉBITOS DEL MES:</strong> ${pintar(cuenta.DEBITOS_MES)}</div>
-            <div><strong>CRÉDITOS DEL MES:</strong> ${pintar(cuenta.CREDITOS_MES)}</div>
-        </div>
-        
-        <hr style="border-top: 1px dashed #aaa; margin: 8px 0;">
-        
-        <div class="saldo-calculado-row">
-            <div><strong>SALDO ACTUAL:</strong></div>
-            <div class="valor-calculado">${saldo_calculado_span}</div>
+        <div class="consulta-detalle-box">
+            <div class="consulta-header">
+                <div><strong>CÓDIGO:</strong> ${cuenta.CODIGO}</div>
+                <div><strong>NOMBRE:</strong> ${cuenta.NOMBRE}</div>
+            </div>
+            
+            <div class="movimientos-grid">
+                <div><strong>SALDO ANTERIOR:</strong> ${pintar(cuenta.SALDO_ANTERIOR)}</div>
+                <div><strong>DÉBITOS DEL MES:</strong> ${pintar(cuenta.DEBITOS_MES)}</div>
+                <div><strong>CRÉDITOS DEL MES:</strong> ${pintar(cuenta.CREDITOS_MES)}</div>
+            </div>
+            
+            <hr style="border-top: 1px dashed #aaa; margin: 8px 0;">
+            
+            <div class="saldo-calculado-row">
+                <div><strong>SALDO ACTUAL:</strong></div>
+                <div class="valor-calculado">${saldo_calculado_span}</div>
+            </div>
         </div>
     `;
 }
