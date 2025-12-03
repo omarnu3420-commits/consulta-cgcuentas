@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251207"; // Versión actualizada
+const VERSION = "20251208"; // Versión actualizada para forzar recarga
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
@@ -33,7 +33,48 @@ function pintar(valorRaw) {
 }
 
 /**
- * Función que carga los datos de cgcodigos.json
+ * Función que genera el HTML del encabezado (Compañía y Mes/Año de Proceso).
+ * Se extrae del primer registro del JSON.
+ * @param {Array} cuentas - El array de cuentas.
+ * @returns {string} HTML del encabezado.
+ */
+function generarHeaderPrincipal(cuentas) {
+    if (!cuentas || cuentas.length === 0) return '';
+    
+    // El primer registro contiene el nombre de la compañía y la info de proceso
+    const infoHeader = cuentas[0]; 
+
+    // 1. Nombre de la Compañía
+    const nombreCia = infoHeader.NOMBRE;
+
+    // 2. Extraer y Formatear Mes/Año de Proceso (asume MMYY en los últimos 4 dígitos antes del signo)
+    const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); 
+    const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
+    
+    let mes = '??';
+    let anio = '??';
+    
+    if (mesYearStr.length === 4) {
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const monthIndex = parseInt(mesYearStr.slice(0, 2), 10) - 1;
+        
+        mes = (monthIndex >= 0 && monthIndex < 12) ? monthNames[monthIndex] : `Mes ${mesYearStr.slice(0, 2)}`;
+        anio = `20${mesYearStr.slice(2, 4)}`;
+    }
+    
+    const mesAnioProceso = `${mes}/${anio}`;
+
+    // 3. Crear el HTML
+    return `
+        <div class="consulta-info-header">
+            <div><strong>CIA:</strong> ${nombreCia}</div>
+            <div><strong>MES/AÑO PROCESO:</strong> ${mesAnioProceso}</div>
+        </div>`;
+}
+
+
+/**
+ * Función que carga los datos de cgcodigos.json y muestra el encabezado inicial.
  */
 async function cargarPlanDeCuentas() {
     try {
@@ -45,12 +86,23 @@ async function cargarPlanDeCuentas() {
         
         cuentas = await response.json();
 
-        // 1. Filtrar solo las cuentas de 'NIVEL': '0' para el selector
+        // ----------------------------------------------------
+        // **NUEVO:** 1. Mostrar el Encabezado Principal al inicio
+        // ----------------------------------------------------
+        const resultadoDiv = document.getElementById('resultado');
+        const headerPrincipalHtml = generarHeaderPrincipal(cuentas);
+        
+        // Insertamos el encabezado principal ANTES del selector de cuentas
+        const selectContainer = document.getElementById('codigo').parentNode;
+        selectContainer.insertAdjacentHTML('beforebegin', headerPrincipalHtml);
+
+
+        // 2. Filtrar solo las cuentas de 'NIVEL': '0' para el selector
         const cuentasDetalle = cuentas.filter(c => c.NIVEL === '0');
 
         const select = document.getElementById('codigo');
         
-        // 2. Llenar el <select> con las cuentas de detalle
+        // 3. Llenar el <select> con las cuentas de detalle
         cuentasDetalle.forEach(cuenta => {
             const option = document.createElement('option');
             option.value = cuenta.CODIGO;
@@ -74,42 +126,16 @@ function consultar() {
     const codigo_cuenta = document.getElementById('codigo').value;
     const resultado = document.getElementById('resultado');
     
-    // --- LÓGICA PARA ENCABEZADO DE COMPAÑÍA Y FECHA ---
-    const infoHeader = cuentas[0]; 
-
-    // 1. Nombre de la Compañía
-    const nombreCia = infoHeader.NOMBRE;
-
-    // 2. Extraer y Formatear Mes/Año de Proceso 
-    const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); 
-    const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
-    
-    let mes = '??';
-    let anio = '??';
-    
-    if (mesYearStr.length === 4) {
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const monthIndex = parseInt(mesYearStr.slice(0, 2), 10) - 1;
-        
-        mes = (monthIndex >= 0 && monthIndex < 12) ? monthNames[monthIndex] : `Mes ${mesYearStr.slice(0, 2)}`;
-        anio = `20${mesYearStr.slice(2, 4)}`;
-    }
-    
-    const mesAnioProceso = `${mes}/${anio}`;
-
-    // 3. Crear el nuevo encabezado de información (SIN <br>)
-    const headerHtml = `
-        <div class="consulta-info-header">
-            <div><strong>CIA:</strong> ${nombreCia}</div>
-            <div><strong>MES/AÑO PROCESO:</strong> ${mesAnioProceso}</div>
-            <div class="consulta-cuenta-title">CONSULTA DE CUENTA</div>
+    // El encabezado principal (CIA y Mes/Año) YA NO SE GENERA AQUÍ, 
+    // pero necesitamos la parte del título "CONSULTA DE CUENTA".
+    const headerTituloHtml = `
+        <div class="consulta-info-header" style="border-bottom: none; margin: 0 auto 10px auto;">
+            <div class="consulta-cuenta-title" style="margin-top: 0;">CONSULTA DE CUENTA</div>
         </div>`;
-    // ----------------------------------------------------------------------
-
 
     if (!codigo_cuenta) {
         resultado.innerHTML = `
-            ${headerHtml}
+            ${headerTituloHtml}
             <p style="color:red; margin-top: 10px;">Por favor, seleccione un código de cuenta.</p>`;
         return;
     }
@@ -118,7 +144,7 @@ function consultar() {
 
     if (!cuenta) {
         resultado.innerHTML = `
-            ${headerHtml}
+            ${headerTituloHtml}
             <p style="color:red; margin-top: 10px;">No se encontró la cuenta con código ${codigo_cuenta}.</p>`;
         return;
     }
@@ -138,9 +164,9 @@ function consultar() {
         })}</span>`;
     }
 
-    // ESTRUCTURA HTML FINAL (Añadiendo el wrapper .consulta-detalle-box)
+    // ESTRUCTURA HTML FINAL (Usando solo el Título de Consulta)
     resultado.innerHTML = `
-        ${headerHtml}
+        ${headerTituloHtml}
         
         <div class="consulta-detalle-box">
             <div class="consulta-header">
