@@ -7,21 +7,200 @@ body {
     color: #000;
 }
 
-/* ------------------------------------------- */
-/* NUEVO: Encabezado de Compañía (Permanente) */
-/* ------------------------------------------- */
-#encabezado-info {
-    font-family: Arial, sans-serif;
+/* h1 (Se mantiene el selector por seguridad, aunque fue eliminado del HTML) */
+h1 {
     color: #336699;
-    font-weight: bold;
-    text-align: center;
-    /* Ajuste de márgenes para la parte superior de la página */
-    margin: 0 auto 20px auto; 
-    padding-bottom: 10px;
+    font-size: 24px;
+    margin-bottom: 20px;
     border-bottom: 2px solid #336699;
-    max-width: 400px;
+    padding-bottom: 10px;
 }
 
-#encabezado-info div {
+/* label (Se mantiene el selector por seguridad, aunque fue eliminado del HTML) */
+label {
+    font-weight: bold;
     display: block;
-    line-height
+    margin-bottom: 5px;
+}
+
+select {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 0; 
+}
+
+/* Ajuste de margen superior para select y button */
+select, button {
+    font-size: 16px;
+    padding: 10px; 
+    /* Aumentamos el margen superior para compensar la falta del h1/label */
+    margin-top: 20px; 
+    border: 2px solid #000;
+    border-radius: 4px;
+    background-color: #ffffcc;
+    color: #000;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+    display: block; 
+    width: 100%;
+    max-width: 400px; /* Limita el ancho en desktop */
+}
+
+button {
+    background-color: #336699;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 0; 
+    margin-bottom: 20px;
+}
+
+button:hover {
+    background-color: #254d73;
+}
+
+/* El recuadro principal de resultados */
+#resultado {
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid #000;
+    background-color: #ffffff;
+    line-height: 1.8;
+    border-radius: 5px;
+}
+
+#resultado strong {
+    font-weight: bold;
+    color: #336699; 
+}
+
+/* ------------------------------------------- */
+/* NUEVO: Contenedor para hacer la consulta más pequeña */
+/* ------------------------------------------- */
+.consulta-detalle-box {
+    /* Define el ancho máximo y lo centra en el recuadro #resultado */
+    max-width: 400px; 
+    margin: 0 auto;
+}
+
+/* ------------------------------------------- */
+/* ENCABEZADO PRINCIPAL (CIA y MES/AÑO) */
+/* ------------------------------------------- */
+.consulta-info-header {
+    /* Nueva apariencia de encabezado principal */
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #336699;
+    
+    /* Separadores */
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #336699; /* Línea más gruesa */
+    
+    /* Centrado de la caja */
+    max-width: 400px; 
+    margin: 0 auto 15px auto;
+    
+    /* Aseguramos que el Nombre de la CIA y Mes/Año vayan arriba de todo */
+    margin-top: -10px; 
+    padding-top: 10px;
+}
+
+.consulta-info-header > div {
+    display: block;
+}
+
+.consulta-cuenta-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #336699;
+    margin-top: 10px;
+}
+
+
+/* BLOQUE DE CUENTA (CÓDIGO y NOMBRE) */
+.consulta-header {
+    /* Separación mínima con CONSULTA DE CUENTA */
+    margin-top: 0; 
+    margin-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-size: 1.2em;
+}
+
+/* Movimientos en una sola columna para todas las pantallas */
+.movimientos-grid {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 5px;
+    margin-top: 8px;
+}
+
+/* Estilo de fila para movimientos (separación reducida) */
+.movimientos-grid > div {
+    border: 1px solid #eee;
+    padding: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Estilos para la fila de Saldo Actual (separación reducida) */
+.saldo-calculado-row {
+    padding: 5px 0;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.valor-calculado {
+    font-size: 1.5em; 
+    font-weight: bold;
+}
+
+
+/* ------------------------------------------------ */
+/* Optimizaciones para Móviles (pantallas <= 600px) */
+/* ------------------------------------------------ */
+@media (max-width: 600px) {
+    
+    body {
+        padding: 10px; 
+    }
+
+    /* Ajuste de margen superior para select/button en móvil */
+    select, button {
+        margin-top: 15px;
+    }
+    
+    h1 {
+        font-size: 20px; 
+    }
+
+    .movimientos-grid {
+        gap: 8px; 
+    }
+    
+    .consulta-header > div {
+        display: block; 
+        margin-bottom: 5px;
+    }
+    
+    .saldo-calculado-row {
+        display: block; 
+        padding: 5px 0;
+    }
+
+    .saldo-calculado-row > div:first-child {
+        margin-bottom: 5px; 
+    }
+    
+    .valor-calculado {
+        text-align: right;
+        font-size: 1.8em !important; 
+    }
+    
+    .consulta-detalle-box, .consulta-info-header {
+        max-width: 100%;
+    }
+}
