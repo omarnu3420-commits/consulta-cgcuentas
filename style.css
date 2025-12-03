@@ -69,29 +69,54 @@ button:hover {
     color: #336699; 
 }
 
-/* Estilos de la nueva estructura de resultados */
+/* ------------------------------------------- */
+/* ESTILOS DE LOS NUEVOS ENCABEZADOS DE PANTALLA */
+/* ------------------------------------------- */
+.consulta-info-header {
+    /* Estilo para el bloque CIA y MES/AÑO */
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9em;
+}
+
+.consulta-info-header > div {
+    /* Fuerza a que cada línea (CIA, MES/AÑO, Título) ocupe su propia línea */
+    display: block;
+}
+
+.consulta-cuenta-title {
+    /* Estilo para el título CONSULTA DE CUENTA */
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #336699;
+    margin-top: 10px;
+}
+/* ------------------------------------------- */
+
 
 .consulta-header {
+    /* Estilo del encabezado de cuenta (CÓDIGO y NOMBRE) */
+    margin-top: 15px; /* Separación después del nuevo encabezado */
     margin-bottom: 15px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
     font-size: 1.2em;
 }
 
-/* **CAMBIO AQUÍ: Se fuerza una sola columna (vertical) para todas las pantallas** */
+/* Movimientos en una sola columna para todas las pantallas */
 .movimientos-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Una sola columna para todos los movimientos */
+    grid-template-columns: 1fr; 
     gap: 10px;
     margin-top: 15px;
 }
 
-/* **NUEVO: Se aplica el estilo de fila para que se vea ordenado verticalmente** */
+/* Estilo de fila para movimientos */
 .movimientos-grid > div {
     border: 1px solid #eee;
     padding: 8px;
     border-radius: 4px;
-    /* Mantiene la etiqueta a la izquierda y el valor a la derecha */
     display: flex;
     justify-content: space-between;
 }
@@ -124,12 +149,11 @@ button:hover {
         font-size: 20px; 
     }
 
-    /* El grid ya está en 1 columna, solo ajustamos el gap */
     .movimientos-grid {
         gap: 15px;
     }
     
-    /* Forzar que el CÓDIGO/NOMBRE se apile en el encabezado */
+    /* Forzar que el CÓDIGO/NOMBRE se apile en el encabezado de cuenta */
     .consulta-header > div {
         display: block; 
         margin-bottom: 5px;

@@ -1,8 +1,7 @@
 let cuentas = [];
-const VERSION = "20251202"; // Versión fija para consistencia
+const VERSION = "20251202"; 
 
 // Convierte un valor con signo al final en número decimal
-// Ejemplo: "000024307-" → -243.07
 function parseMonto(valor) {
     if (!valor) return NaN;
     const s = String(valor).trim();
@@ -13,19 +12,19 @@ function parseMonto(valor) {
 
     if (last === '-' || last === '+') {
         signo = (last === '-') ? -1 : 1;
-        cuerpo = s.slice(0, -1); // quitar el signo final
+        cuerpo = s.slice(0, -1); 
     }
 
     const entero = parseInt(cuerpo, 10);
     if (isNaN(entero)) return NaN;
 
-    return signo * (entero / 100); // dividir por 100 una sola vez
+    return signo * (entero / 100); 
 }
 
-// Da formato de moneda (es-VE) y color (rojo si es negativo)
+// Da formato de moneda (es-VE) y color
 function pintar(valorRaw) {
     const num = parseMonto(valorRaw);
-    if (isNaN(num) || num === 0) return '<span>0,00</span>'; // Mostrar 0,00
+    if (isNaN(num) || num === 0) return '<span>0,00</span>'; 
     const color = num >= 0 ? 'black' : 'red';
     return `<span style="color:${color}">${num.toLocaleString('es-VE', {
         minimumFractionDigits: 2,
@@ -34,12 +33,10 @@ function pintar(valorRaw) {
 }
 
 /**
- * Función que carga los datos de cgcodigos.json, filtra las cuentas de detalle (Nivel 0)
- * y llena el selector.
+ * Función que carga los datos de cgcodigos.json
  */
 async function cargarPlanDeCuentas() {
     try {
-        // CORRECCIÓN: Usar fetch() para cargar el JSON
         const response = await fetch('cgcodigos.json');
         
         if (!response.ok) {
@@ -67,7 +64,6 @@ async function cargarPlanDeCuentas() {
         console.error("Error al cargar el plan de cuentas:", error);
         alert(`No se pudo cargar el plan de cuentas. Verifique la consola para más detalles. Error: ${error.message}`);
         
-        // Mensaje de error visible
         const select = document.getElementById('codigo');
         select.innerHTML = '<option value="">-- Error al cargar datos --</option>';
     }
@@ -77,28 +73,64 @@ async function cargarPlanDeCuentas() {
 function consultar() {
     const codigo_cuenta = document.getElementById('codigo').value;
     const resultado = document.getElementById('resultado');
+    
+    // --- LÓGICA PARA EXTRAER EL ENCABEZADO DE LA COMPAÑÍA Y FECHA ---
+    const infoHeader = cuentas[0]; // Primer registro del JSON
+
+    // 1. Nombre de la Compañía
+    const nombreCia = infoHeader.NOMBRE;
+
+    // 2. Extraer y Formatear Mes/Año de Proceso (asume MMYY en los últimos 4 dígitos antes del signo)
+    const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); // Quita signo
+    const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
+    
+    let mes = '??';
+    let anio = '??';
+    
+    if (mesYearStr.length === 4) {
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const monthIndex = parseInt(mesYearStr.slice(0, 2), 10) - 1;
+        
+        mes = (monthIndex >= 0 && monthIndex < 12) ? monthNames[monthIndex] : `Mes ${mesYearStr.slice(0, 2)}`;
+        anio = `20${mesYearStr.slice(2, 4)}`;
+    }
+    
+    const mesAnioProceso = `${mes}/${anio}`;
+
+    // 3. Crear el nuevo encabezado de información
+    const headerHtml = `
+        <div class="consulta-info-header">
+            <div><strong>CIA:</strong> ${nombreCia}</div>
+            <div><strong>MES/AÑO PROCESO:</strong> ${mesAnioProceso}</div>
+            <div class="consulta-cuenta-title">CONSULTA DE CUENTA</div>
+        </div>
+        <br>`;
+    // ----------------------------------------------------------------------
+
 
     if (!codigo_cuenta) {
-        resultado.innerHTML = '<p style="color:red;">Por favor, seleccione un código de cuenta.</p>';
+        // Muestra el encabezado incluso si falta la cuenta
+        resultado.innerHTML = `
+            ${headerHtml}
+            <p style="color:red;">Por favor, seleccione un código de cuenta.</p>`;
         return;
     }
 
     const cuenta = cuentas.find(c => c.CODIGO === codigo_cuenta);
 
     if (!cuenta) {
-        resultado.innerHTML = `<p style="color:red;">No se encontró la cuenta con código ${codigo_cuenta}.</p>`;
+        resultado.innerHTML = `
+            ${headerHtml}
+            <p style="color:red;">No se encontró la cuenta con código ${codigo_cuenta}.</p>`;
         return;
     }
 
-    // 1. Obtener valores como números
+    // Lógica de cálculo (sin cambios)
     const saldo_anterior = parseMonto(cuenta.SALDO_ANTERIOR);
     const debitos = parseMonto(cuenta.DEBITOS_MES);
     const creditos = parseMonto(cuenta.CREDITOS_MES);
-
-    // 2. Calcular el Saldo (FÓRMULA: Saldo Anterior + Débitos - Créditos)
     const saldo_calculado_num = saldo_anterior + debitos - creditos;
 
-    // 3. Formatear el saldo calculado (misma lógica que pintar)
     let saldo_calculado_span = '<span>0,00</span>';
     if (!isNaN(saldo_calculado_num) && saldo_calculado_num !== 0) {
         const color = saldo_calculado_num >= 0 ? 'black' : 'red';
@@ -108,9 +140,10 @@ function consultar() {
         })}</span>`;
     }
 
-    // ESTRUCTURA HTML ACTUALIZADA
-    // Se ha quitado la comparación con SALDO EN JSON y se renombra a SALDO ACTUAL.
+    // Estructura HTML final
     resultado.innerHTML = `
+        ${headerHtml}
+        
         <div class="consulta-header">
             <div><strong>CÓDIGO:</strong> ${cuenta.CODIGO}</div>
             <div><strong>NOMBRE:</strong> ${cuenta.NOMBRE}</div>
@@ -131,5 +164,4 @@ function consultar() {
     `;
 }
 
-// Asegurar que la función de carga se ejecute automáticamente al iniciar la app
 document.addEventListener('DOMContentLoaded', cargarPlanDeCuentas);
