@@ -1,8 +1,10 @@
 let cuentas = [];
-const VERSION = "20251209"; // Versión actualizada para forzar recarga
+const VERSION = "20251210"; // Versión actualizada
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
+// ... (resto de la función)
+// ... (resto de la función)
     if (!valor) return NaN;
     const s = String(valor).trim();
 
@@ -85,16 +87,18 @@ async function cargarPlanDeCuentas() {
         // ----------------------------------------------------
         const headerPrincipalHtml = generarHeaderPrincipal(cuentas);
         
-        // Obtenemos una referencia al elemento <select id="codigo">
-        const selectElement = document.getElementById('codigo');
+        // Obtenemos una referencia al NUEVO contenedor #main-controls
+        const mainControlsElement = document.getElementById('main-controls');
         
-        // Insertamos el encabezado principal justo antes del <select>
-        if (selectElement) {
-             selectElement.insertAdjacentHTML('beforebegin', headerPrincipalHtml);
+        // Insertamos el encabezado principal justo antes del contenedor de controles
+        if (mainControlsElement) {
+             mainControlsElement.insertAdjacentHTML('beforebegin', headerPrincipalHtml);
         }
 
         // 2. Filtrar solo las cuentas de 'NIVEL': '0' para el selector
         const cuentasDetalle = cuentas.filter(c => c.NIVEL === '0');
+
+        const selectElement = document.getElementById('codigo'); 
 
         // 3. Llenar el <select> con las cuentas de detalle
         cuentasDetalle.forEach(cuenta => {

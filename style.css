@@ -7,7 +7,7 @@ body {
     color: #000;
 }
 
-/* h1 (Se mantiene el selector por seguridad, aunque fue eliminado del HTML) */
+/* h1/label (Se mantienen los selectores por seguridad) */
 h1 {
     color: #336699;
     font-size: 24px;
@@ -16,7 +16,6 @@ h1 {
     padding-bottom: 10px;
 }
 
-/* label (Se mantiene el selector por seguridad, aunque fue eliminado del HTML) */
 label {
     font-weight: bold;
     display: block;
@@ -25,16 +24,24 @@ label {
 
 select {
     width: 100%;
-    max-width: 400px;
     margin-bottom: 0; 
 }
 
-/* Ajuste de margen superior para select y button */
+/* ------------------------------------------- */
+/* NUEVO: Contenedor para Centrar SELECT y BUTTON */
+/* ------------------------------------------- */
+#main-controls {
+    max-width: 400px; 
+    /* Margen superior para separación, 'auto' para centrar */
+    margin: 20px auto 0 auto; 
+}
+
+
+/* Mejora para select y button */
 select, button {
     font-size: 16px;
     padding: 10px; 
-    /* Aumentamos el margen superior para compensar la falta del h1/label */
-    margin-top: 20px; 
+    margin-top: 10px; /* Separación entre select y button */
     border: 2px solid #000;
     border-radius: 4px;
     background-color: #ffffcc;
@@ -43,7 +50,6 @@ select, button {
     transition: background-color 0.3s ease;
     display: block; 
     width: 100%;
-    max-width: 400px; /* Limita el ancho en desktop */
 }
 
 button {
@@ -66,6 +72,7 @@ button:hover {
     background-color: #ffffff;
     line-height: 1.8;
     border-radius: 5px;
+    /* #resultado DEBE OCUPAR TODO EL ANCHO PARA SER EL FONDO */
 }
 
 #resultado strong {
@@ -74,34 +81,28 @@ button:hover {
 }
 
 /* ------------------------------------------- */
-/* NUEVO: Contenedor para hacer la consulta más pequeña */
+/* Contenedores centrados (400px de ancho máximo) */
 /* ------------------------------------------- */
 .consulta-detalle-box {
-    /* Define el ancho máximo y lo centra en el recuadro #resultado */
     max-width: 400px; 
     margin: 0 auto;
 }
 
-/* ------------------------------------------- */
-/* ENCABEZADO PRINCIPAL (CIA y MES/AÑO) */
-/* ------------------------------------------- */
+/* Encabezado principal (CIA y MES/AÑO) - DEBE QUEDAR CENTRADO */
 .consulta-info-header {
-    /* Nueva apariencia de encabezado principal */
     font-size: 1.1em;
     font-weight: bold;
     color: #336699;
     
-    /* Separadores */
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #336699; /* Línea más gruesa */
+    border-bottom: 2px solid #336699;
     
     /* Centrado de la caja */
     max-width: 400px; 
     margin: 0 auto 15px auto;
     
-    /* Aseguramos que el Nombre de la CIA y Mes/Año vayan arriba de todo */
-    margin-top: -10px; 
+    margin-top: 0; 
     padding-top: 10px;
 }
 
@@ -119,7 +120,6 @@ button:hover {
 
 /* BLOQUE DE CUENTA (CÓDIGO y NOMBRE) */
 .consulta-header {
-    /* Separación mínima con CONSULTA DE CUENTA */
     margin-top: 0; 
     margin-bottom: 8px;
     border-bottom: 1px solid #eee;
@@ -135,7 +135,7 @@ button:hover {
     margin-top: 8px;
 }
 
-/* Estilo de fila para movimientos (separación reducida) */
+/* Estilo de fila para movimientos */
 .movimientos-grid > div {
     border: 1px solid #eee;
     padding: 5px;
@@ -144,7 +144,7 @@ button:hover {
     justify-content: space-between;
 }
 
-/* Estilos para la fila de Saldo Actual (separación reducida) */
+/* Estilos para la fila de Saldo Actual */
 .saldo-calculado-row {
     padding: 5px 0;
     border-top: 1px solid #ddd;
@@ -167,14 +167,11 @@ button:hover {
     body {
         padding: 10px; 
     }
-
-    /* Ajuste de margen superior para select/button en móvil */
-    select, button {
-        margin-top: 15px;
-    }
     
-    h1 {
-        font-size: 20px; 
+    /* El contenedor principal de controles debe ser ancho completo en móvil */
+    #main-controls {
+        max-width: 100%;
+        margin-top: 15px;
     }
 
     .movimientos-grid {
@@ -200,6 +197,7 @@ button:hover {
         font-size: 1.8em !important; 
     }
     
+    /* Los contenedores de resultados deben ser ancho completo en móvil */
     .consulta-detalle-box, .consulta-info-header {
         max-width: 100%;
     }
