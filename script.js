@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251204"; // Versión actualizada
+const VERSION = "20251205"; // Versión actualizada
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
@@ -74,14 +74,14 @@ function consultar() {
     const codigo_cuenta = document.getElementById('codigo').value;
     const resultado = document.getElementById('resultado');
     
-    // --- LÓGICA PARA EXTRAER EL ENCABEZADO DE LA COMPAÑÍA Y FECHA ---
-    const infoHeader = cuentas[0]; // Primer registro del JSON
+    // --- LÓGICA PARA ENCABEZADO DE COMPAÑÍA Y FECHA ---
+    const infoHeader = cuentas[0]; 
 
     // 1. Nombre de la Compañía
     const nombreCia = infoHeader.NOMBRE;
 
     // 2. Extraer y Formatear Mes/Año de Proceso (asume MMYY en los últimos 4 dígitos antes del signo)
-    const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); // Quita signo
+    const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); 
     const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
     
     let mes = '??';
@@ -97,21 +97,20 @@ function consultar() {
     
     const mesAnioProceso = `${mes}/${anio}`;
 
-    // 3. Crear el nuevo encabezado de información
+    // 3. Crear el nuevo encabezado de información (QUITANDO EL <br>)
     const headerHtml = `
         <div class="consulta-info-header">
             <div><strong>CIA:</strong> ${nombreCia}</div>
             <div><strong>MES/AÑO PROCESO:</strong> ${mesAnioProceso}</div>
             <div class="consulta-cuenta-title">CONSULTA DE CUENTA</div>
-        </div>
-        <br>`;
+        </div>`;
     // ----------------------------------------------------------------------
 
 
     if (!codigo_cuenta) {
         resultado.innerHTML = `
             ${headerHtml}
-            <p style="color:red;">Por favor, seleccione un código de cuenta.</p>`;
+            <p style="color:red; margin-top: 10px;">Por favor, seleccione un código de cuenta.</p>`;
         return;
     }
 
@@ -120,7 +119,7 @@ function consultar() {
     if (!cuenta) {
         resultado.innerHTML = `
             ${headerHtml}
-            <p style="color:red;">No se encontró la cuenta con código ${codigo_cuenta}.</p>`;
+            <p style="color:red; margin-top: 10px;">No se encontró la cuenta con código ${codigo_cuenta}.</p>`;
         return;
     }
 

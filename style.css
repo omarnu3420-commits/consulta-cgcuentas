@@ -94,11 +94,10 @@ button:hover {
 
 /* REDUCCIÓN DE SEPARACIÓN VERTICAL EN EL BLOQUE DE CUENTA */
 .consulta-header {
-    /* Menos separación inferior (was 15px) */
-    margin-top: 8px;
+    /* ELIMINADO: margin-top: 8px; <-- Esto reduce la separación vertical con CONSULTA DE CUENTA */
+    margin-top: 0;
     margin-bottom: 8px;
     border-bottom: 1px solid #eee;
-    /* Menos relleno inferior (was 10px) */
     padding-bottom: 5px;
     font-size: 1.2em;
 }
@@ -107,16 +106,13 @@ button:hover {
 .movimientos-grid {
     display: grid;
     grid-template-columns: 1fr; 
-    /* Menos separación entre filas (was 10px) */
     gap: 5px;
-    /* Menos separación superior (was 15px) */
     margin-top: 8px;
 }
 
 /* Estilo de fila para movimientos */
 .movimientos-grid > div {
     border: 1px solid #eee;
-    /* Menos relleno vertical (was 8px) */
     padding: 5px;
     border-radius: 4px;
     display: flex;
@@ -125,7 +121,6 @@ button:hover {
 
 /* Estilos para la fila de Saldo Actual */
 .saldo-calculado-row {
-    /* Menos relleno vertical (was 10px 0) */
     padding: 5px 0;
     border-top: 1px solid #ddd;
     display: flex;
@@ -152,7 +147,6 @@ button:hover {
         font-size: 20px; 
     }
 
-    /* Ajuste para móvil (was 15px) */
     .movimientos-grid {
         gap: 8px; 
     }
@@ -164,7 +158,6 @@ button:hover {
     
     .saldo-calculado-row {
         display: block; 
-        /* Menos relleno vertical para móvil (was 8px 0) */
         padding: 5px 0;
     }
 
