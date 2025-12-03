@@ -1,4 +1,4 @@
-/* style.css (Versión Optimizada para Móviles) */
+/* style.css (Versión Optimizada para Móviles y Vertical) */
 
 body {
     background-color: #f0f0f0;
@@ -78,15 +78,26 @@ button:hover {
     font-size: 1.2em;
 }
 
-/* 3 columnas en desktop */
+/* **CAMBIO AQUÍ: Se fuerza una sola columna (vertical) para todas las pantallas** */
 .movimientos-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
+    grid-template-columns: 1fr; /* Una sola columna para todos los movimientos */
     gap: 10px;
     margin-top: 15px;
 }
 
-.saldo-calculado-row, .saldo-json-row {
+/* **NUEVO: Se aplica el estilo de fila para que se vea ordenado verticalmente** */
+.movimientos-grid > div {
+    border: 1px solid #eee;
+    padding: 8px;
+    border-radius: 4px;
+    /* Mantiene la etiqueta a la izquierda y el valor a la derecha */
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Estilos para la fila de Saldo Actual */
+.saldo-calculado-row {
     padding: 10px 0;
     border-top: 1px solid #ddd;
     display: flex;
@@ -113,19 +124,9 @@ button:hover {
         font-size: 20px; 
     }
 
-    /* Apilar los 3 movimientos en una sola columna */
+    /* El grid ya está en 1 columna, solo ajustamos el gap */
     .movimientos-grid {
-        grid-template-columns: 1fr; 
         gap: 15px;
-    }
-    
-    /* Mejorar la legibilidad de cada movimiento en el grid */
-    .movimientos-grid > div {
-        border: 1px solid #eee;
-        padding: 8px;
-        border-radius: 4px;
-        display: flex;
-        justify-content: space-between;
     }
     
     /* Forzar que el CÓDIGO/NOMBRE se apile en el encabezado */
@@ -135,18 +136,17 @@ button:hover {
     }
     
     /* Mejorar la visualización del saldo final apilando el label y el valor */
-    .saldo-calculado-row, 
-    .saldo-json-row {
+    .saldo-calculado-row {
         display: block; 
         padding: 8px 0;
     }
 
-    .saldo-calculado-row > div:first-child, .saldo-json-row > div:first-child {
+    .saldo-calculado-row > div:first-child {
         margin-bottom: 5px; 
     }
     
     /* Alinear el valor del saldo a la derecha en móvil */
-    .valor-calculado, .valor-json {
+    .valor-calculado {
         text-align: right;
     }
     
