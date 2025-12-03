@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251206"; // Versión actualizada
+const VERSION = "20251207"; // Versión actualizada
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
