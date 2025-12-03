@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251208"; // Versión actualizada para forzar recarga
+const VERSION = "20251209"; // Versión actualizada para forzar recarga
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
@@ -34,20 +34,14 @@ function pintar(valorRaw) {
 
 /**
  * Función que genera el HTML del encabezado (Compañía y Mes/Año de Proceso).
- * Se extrae del primer registro del JSON.
- * @param {Array} cuentas - El array de cuentas.
- * @returns {string} HTML del encabezado.
  */
 function generarHeaderPrincipal(cuentas) {
     if (!cuentas || cuentas.length === 0) return '';
     
-    // El primer registro contiene el nombre de la compañía y la info de proceso
     const infoHeader = cuentas[0]; 
-
-    // 1. Nombre de la Compañía
     const nombreCia = infoHeader.NOMBRE;
-
-    // 2. Extraer y Formatear Mes/Año de Proceso (asume MMYY en los últimos 4 dígitos antes del signo)
+    
+    // Extracción y Formato de Mes/Año de Proceso
     const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); 
     const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
     
@@ -87,27 +81,27 @@ async function cargarPlanDeCuentas() {
         cuentas = await response.json();
 
         // ----------------------------------------------------
-        // **NUEVO:** 1. Mostrar el Encabezado Principal al inicio
+        // **AJUSTE:** 1. Mostrar el Encabezado Principal al inicio
         // ----------------------------------------------------
-        const resultadoDiv = document.getElementById('resultado');
         const headerPrincipalHtml = generarHeaderPrincipal(cuentas);
         
-        // Insertamos el encabezado principal ANTES del selector de cuentas
-        const selectContainer = document.getElementById('codigo').parentNode;
-        selectContainer.insertAdjacentHTML('beforebegin', headerPrincipalHtml);
-
+        // Obtenemos una referencia al elemento <select id="codigo">
+        const selectElement = document.getElementById('codigo');
+        
+        // Insertamos el encabezado principal justo antes del <select>
+        if (selectElement) {
+             selectElement.insertAdjacentHTML('beforebegin', headerPrincipalHtml);
+        }
 
         // 2. Filtrar solo las cuentas de 'NIVEL': '0' para el selector
         const cuentasDetalle = cuentas.filter(c => c.NIVEL === '0');
 
-        const select = document.getElementById('codigo');
-        
         // 3. Llenar el <select> con las cuentas de detalle
         cuentasDetalle.forEach(cuenta => {
             const option = document.createElement('option');
             option.value = cuenta.CODIGO;
             option.textContent = `${cuenta.CODIGO} - ${cuenta.NOMBRE}`;
-            select.appendChild(option);
+            selectElement.appendChild(option);
         });
 
         console.log(`Plan de cuentas cargado. Se encontraron ${cuentasDetalle.length} cuentas de detalle.`);
@@ -117,7 +111,9 @@ async function cargarPlanDeCuentas() {
         alert(`No se pudo cargar el plan de cuentas. Verifique la consola para más detalles. Error: ${error.message}`);
         
         const select = document.getElementById('codigo');
-        select.innerHTML = '<option value="">-- Error al cargar datos --</option>';
+        if (select) {
+            select.innerHTML = '<option value="">-- Error al cargar datos --</option>';
+        }
     }
 }
 
@@ -126,8 +122,7 @@ function consultar() {
     const codigo_cuenta = document.getElementById('codigo').value;
     const resultado = document.getElementById('resultado');
     
-    // El encabezado principal (CIA y Mes/Año) YA NO SE GENERA AQUÍ, 
-    // pero necesitamos la parte del título "CONSULTA DE CUENTA".
+    // Título de consulta (Se genera sin la CIA/Mes/Año que ya se muestran arriba)
     const headerTituloHtml = `
         <div class="consulta-info-header" style="border-bottom: none; margin: 0 auto 10px auto;">
             <div class="consulta-cuenta-title" style="margin-top: 0;">CONSULTA DE CUENTA</div>
@@ -164,7 +159,7 @@ function consultar() {
         })}</span>`;
     }
 
-    // ESTRUCTURA HTML FINAL (Usando solo el Título de Consulta)
+    // ESTRUCTURA HTML FINAL
     resultado.innerHTML = `
         ${headerTituloHtml}
         
