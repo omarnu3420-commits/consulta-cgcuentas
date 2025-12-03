@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251207"; // Versión actualizada
+const VERSION = "20251208"; // Versión actualizada
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
@@ -32,8 +32,27 @@ function pintar(valorRaw) {
     })}</span>`;
 }
 
+// NUEVO: Función para extraer y formatear el Mes/Año del proceso
+function getProcessMonthYear(cuenta) {
+    const saldoAnteriorHeader = String(cuenta.SALDO_ANTERIOR).replace(/[^0-9]/g, '');
+    const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
+    
+    let mes = '??';
+    let anio = '??';
+    
+    if (mesYearStr.length === 4) {
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const monthIndex = parseInt(mesYearStr.slice(0, 2), 10) - 1;
+        
+        mes = (monthIndex >= 0 && monthIndex < 12) ? monthNames[monthIndex] : `Mes ${mesYearStr.slice(0, 2)}`;
+        anio = `20${mesYearStr.slice(2, 4)}`;
+    }
+    
+    return `${mes}/${anio}`;
+}
+
 /**
- * Función que carga los datos de cgcodigos.json
+ * Función que carga los datos de cgcodigos.json y el encabezado inicial
  */
 async function cargarPlanDeCuentas() {
     try {
@@ -45,12 +64,21 @@ async function cargarPlanDeCuentas() {
         
         cuentas = await response.json();
 
-        // 1. Filtrar solo las cuentas de 'NIVEL': '0' para el selector
-        const cuentasDetalle = cuentas.filter(c => c.NIVEL === '0');
+        // 1. Mostrar Encabezado Inicial (CIA y Mes/Año)
+        const infoHeader = cuentas[0];
+        const nombreCia = infoHeader.NOMBRE;
+        const mesAnioProceso = getProcessMonthYear(infoHeader);
+        
+        const encabezadoDiv = document.getElementById('encabezado-info');
+        encabezadoDiv.innerHTML = `
+            <div><strong>${nombreCia}</strong></div>
+            <div>PERIODO DE PROCESO: ${mesAnioProceso}</div>
+        `;
 
+        // 2. Llenar el <select>
+        const cuentasDetalle = cuentas.filter(c => c.NIVEL === '0');
         const select = document.getElementById('codigo');
         
-        // 2. Llenar el <select> con las cuentas de detalle
         cuentasDetalle.forEach(cuenta => {
             const option = document.createElement('option');
             option.value = cuenta.CODIGO;
@@ -74,56 +102,24 @@ function consultar() {
     const codigo_cuenta = document.getElementById('codigo').value;
     const resultado = document.getElementById('resultado');
     
-    // --- LÓGICA PARA ENCABEZADO DE COMPAÑÍA Y FECHA ---
-    const infoHeader = cuentas[0]; 
-
-    // 1. Nombre de la Compañía
-    const nombreCia = infoHeader.NOMBRE;
-
-    // 2. Extraer y Formatear Mes/Año de Proceso 
-    const saldoAnteriorHeader = String(infoHeader.SALDO_ANTERIOR).replace(/[^0-9]/g, ''); 
-    const mesYearStr = saldoAnteriorHeader.length >= 4 ? saldoAnteriorHeader.slice(-4) : '??/??';
-    
-    let mes = '??';
-    let anio = '??';
-    
-    if (mesYearStr.length === 4) {
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const monthIndex = parseInt(mesYearStr.slice(0, 2), 10) - 1;
-        
-        mes = (monthIndex >= 0 && monthIndex < 12) ? monthNames[monthIndex] : `Mes ${mesYearStr.slice(0, 2)}`;
-        anio = `20${mesYearStr.slice(2, 4)}`;
-    }
-    
-    const mesAnioProceso = `${mes}/${anio}`;
-
-    // 3. Crear el nuevo encabezado de información (SIN <br>)
-    const headerHtml = `
-        <div class="consulta-info-header">
-            <div><strong>CIA:</strong> ${nombreCia}</div>
-            <div><strong>MES/AÑO PROCESO:</strong> ${mesAnioProceso}</div>
-            <div class="consulta-cuenta-title">CONSULTA DE CUENTA</div>
-        </div>`;
+    // --- MODIFICADO: Solo se usa el título "CONSULTA DE CUENTA" para el bloque de resultados ---
+    const headerHtml = `<div class="consulta-cuenta-title">CONSULTA DE CUENTA</div>`; 
     // ----------------------------------------------------------------------
 
 
     if (!codigo_cuenta) {
-        resultado.innerHTML = `
-            ${headerHtml}
-            <p style="color:red; margin-top: 10px;">Por favor, seleccione un código de cuenta.</p>`;
+        resultado.innerHTML = `<p style="color:red; margin-top: 10px;">Por favor, seleccione un código de cuenta.</p>`;
         return;
     }
 
     const cuenta = cuentas.find(c => c.CODIGO === codigo_cuenta);
 
     if (!cuenta) {
-        resultado.innerHTML = `
-            ${headerHtml}
-            <p style="color:red; margin-top: 10px;">No se encontró la cuenta con código ${codigo_cuenta}.</p>`;
+        resultado.innerHTML = `<p style="color:red; margin-top: 10px;">No se encontró la cuenta con código ${codigo_cuenta}.</p>`;
         return;
     }
 
-    // Lógica de cálculo 
+    // Lógica de cálculo (sin cambios)
     const saldo_anterior = parseMonto(cuenta.SALDO_ANTERIOR);
     const debitos = parseMonto(cuenta.DEBITOS_MES);
     const creditos = parseMonto(cuenta.CREDITOS_MES);
@@ -138,7 +134,7 @@ function consultar() {
         })}</span>`;
     }
 
-    // ESTRUCTURA HTML FINAL (Añadiendo el wrapper .consulta-detalle-box)
+    // ESTRUCTURA HTML FINAL
     resultado.innerHTML = `
         ${headerHtml}
         
