@@ -73,7 +73,6 @@ button:hover {
 /* ESTILOS DE LOS NUEVOS ENCABEZADOS DE PANTALLA */
 /* ------------------------------------------- */
 .consulta-info-header {
-    /* Estilo para el bloque CIA y MES/AÑO */
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
@@ -81,12 +80,10 @@ button:hover {
 }
 
 .consulta-info-header > div {
-    /* Fuerza a que cada línea (CIA, MES/AÑO, Título) ocupe su propia línea */
     display: block;
 }
 
 .consulta-cuenta-title {
-    /* Estilo para el título CONSULTA DE CUENTA */
     font-size: 1.2em;
     font-weight: bold;
     color: #336699;
@@ -95,12 +92,14 @@ button:hover {
 /* ------------------------------------------- */
 
 
+/* REDUCCIÓN DE SEPARACIÓN VERTICAL EN EL BLOQUE DE CUENTA */
 .consulta-header {
-    /* Estilo del encabezado de cuenta (CÓDIGO y NOMBRE) */
-    margin-top: 15px; 
-    margin-bottom: 15px;
+    /* Menos separación inferior (was 15px) */
+    margin-top: 8px;
+    margin-bottom: 8px;
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    /* Menos relleno inferior (was 10px) */
+    padding-bottom: 5px;
     font-size: 1.2em;
 }
 
@@ -108,14 +107,17 @@ button:hover {
 .movimientos-grid {
     display: grid;
     grid-template-columns: 1fr; 
-    gap: 10px;
-    margin-top: 15px;
+    /* Menos separación entre filas (was 10px) */
+    gap: 5px;
+    /* Menos separación superior (was 15px) */
+    margin-top: 8px;
 }
 
 /* Estilo de fila para movimientos */
 .movimientos-grid > div {
     border: 1px solid #eee;
-    padding: 8px;
+    /* Menos relleno vertical (was 8px) */
+    padding: 5px;
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
@@ -123,7 +125,8 @@ button:hover {
 
 /* Estilos para la fila de Saldo Actual */
 .saldo-calculado-row {
-    padding: 10px 0;
+    /* Menos relleno vertical (was 10px 0) */
+    padding: 5px 0;
     border-top: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
@@ -149,33 +152,28 @@ button:hover {
         font-size: 20px; 
     }
 
+    /* Ajuste para móvil (was 15px) */
     .movimientos-grid {
-        gap: 15px;
+        gap: 8px; 
     }
     
-    /* Forzar que el CÓDIGO/NOMBRE se apile en el encabezado de cuenta */
     .consulta-header > div {
         display: block; 
         margin-bottom: 5px;
     }
     
-    /* Mejorar la visualización del saldo final apilando el label y el valor */
     .saldo-calculado-row {
         display: block; 
-        padding: 8px 0;
+        /* Menos relleno vertical para móvil (was 8px 0) */
+        padding: 5px 0;
     }
 
     .saldo-calculado-row > div:first-child {
         margin-bottom: 5px; 
     }
     
-    /* Alinear el valor del saldo a la derecha en móvil */
     .valor-calculado {
         text-align: right;
-    }
-    
-    /* Ajustar el tamaño del saldo calculado para más impacto */
-    .valor-calculado {
         font-size: 1.8em !important; 
     }
 }

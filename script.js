@@ -1,5 +1,5 @@
 let cuentas = [];
-const VERSION = "20251203"; 
+const VERSION = "20251204"; // Versión actualizada
 
 // Convierte un valor con signo al final en número decimal
 function parseMonto(valor) {
@@ -109,7 +109,6 @@ function consultar() {
 
 
     if (!codigo_cuenta) {
-        // Muestra el encabezado incluso si falta la cuenta
         resultado.innerHTML = `
             ${headerHtml}
             <p style="color:red;">Por favor, seleccione un código de cuenta.</p>`;
@@ -140,7 +139,7 @@ function consultar() {
         })}</span>`;
     }
 
-    // Estructura HTML final
+    // ESTRUCTURA HTML FINAL
     resultado.innerHTML = `
         ${headerHtml}
         
@@ -155,7 +154,7 @@ function consultar() {
             <div><strong>CRÉDITOS DEL MES:</strong> ${pintar(cuenta.CREDITOS_MES)}</div>
         </div>
         
-        <hr style="border-top: 1px dashed #aaa; margin: 15px 0;">
+        <hr style="border-top: 1px dashed #aaa; margin: 8px 0;">
         
         <div class="saldo-calculado-row">
             <div><strong>SALDO ACTUAL:</strong></div>
